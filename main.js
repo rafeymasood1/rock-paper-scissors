@@ -2,7 +2,6 @@ const elements = ['rock', 'paper', 'scissors'];
 let humanScore = 0, computerScore = 0;
 
 function getComputerChoice(){
-    // 0,1,2 for rock, paper, scissors 
     let index =  Math.floor(Math.random()*3);
     return elements[index];
 }
@@ -16,7 +15,7 @@ function getHumanChoice(){
 }
 
 function playRound(h, c){
-    let winner = "none";
+    let winner = "No one";
     if (h == c){
         return winner;
     }
@@ -31,15 +30,36 @@ function playRound(h, c){
     else {
         console.log("something went wrong");
     }
+
     return winner;
 }
 
-console.log("Welcome To Rock Paper Scissors\nPlay? (y/n)");
-while(1){
-    
-let choice = getHumanChoice();
-let computerChoice = getComputerChoice();
-let winner = playRound(choice, computerChoice); 
-console.log(`${winner} won!`);
-console.log(`Computer score ${computerScore}, Your Score ${humanScore}`);
+const results = document.querySelector("#results");
+const score = document.querySelector("#score");
+
+function handleClick(playerChoice) {
+    if (computerScore >= 5 || humanScore >= 5) {
+        results.textContent = `Game Over!`;
+        return;
+    }
+
+    let winner = playRound(playerChoice, getComputerChoice());
+    results.textContent = `${winner} Won`;
+    score.textContent = `Computer Score ${computerScore}, Human Score ${humanScore}`;
+
+    if (computerScore >= 5 || humanScore >= 5) {
+        results.textContent = `Game Over! ${winner} is the winner`;
+    }
 }
+
+document.querySelector("#rock").addEventListener("click", () => handleClick("rock"));
+document.querySelector("#paper").addEventListener("click", () => handleClick("paper"));
+document.querySelector("#scissors").addEventListener("click", () => handleClick("scissors"));
+document.querySelector("#restart").addEventListener("click", () => {
+    computerScore = 0;
+    humanScore = 0;
+    results.textContent = "";
+    score.textContent = "";
+});
+
+
